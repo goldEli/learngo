@@ -19,6 +19,10 @@ func (engine *Engine) GET(pattern string, handler HandlerFunc) {
 	engine.addRouter("GET", pattern, handler)
 }
 
+func (engine *Engine) POST(pattern string, handler HandlerFunc) {
+	engine.addRouter("POST", pattern, handler)
+}
+
 func (engine *Engine) Run(port string) {
 	log.Fatal(http.ListenAndServe(port, engine))
 }
