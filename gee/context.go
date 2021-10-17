@@ -3,6 +3,7 @@ package gee
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -48,14 +49,19 @@ func (c *Context) String(code int, format string, values ...interface{}) {
 	c.Writer.Write([]byte(fmt.Sprintf(format, values...)))
 }
 
-func (c *Context) JSON(code int, obj ...interface{}) {
+func (c *Context) JSON(code int, obj interface{}) {
 	c.SetHeader("Content-Type", "application/json")
 	c.Status(code)
-	encoder := json.NewEncoder(c.Writer)
+	// encoder := json.NewEncoder(c.Writer)
 
-	if err := encoder.Encode(obj); err != nil {
-		http.Error(c.Writer, err.Error(), 500)
+	// if err := encoder.Encode(obj); err != nil {
+	// 	http.Error(c.Writer, err.Error(), 500)
+	// }
+	jsonResp, err := json.Marshal(obj)
+	if err != nil {
+		log.Fatalf("Error happened in JSON marshal. Err: %s", err)
 	}
+	c.Writer.Write(jsonResp)
 }
 
 func (c *Context) Data(code int, data []byte) {
