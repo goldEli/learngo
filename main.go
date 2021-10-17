@@ -1,7 +1,14 @@
 package main
 
-import "github.com/goldEli/learngo/gee"
+import (
+	"log"
+	"net/http"
+
+	"github.com/goldEli/learngo/gee"
+)
 
 func main() {
-	gee.Hello()
+	engine := new(gee.Engine)
+
+	log.Fatal(http.ListenAndServe(":9999", engine))
 }

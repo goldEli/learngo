@@ -1,7 +1,19 @@
 package gee
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
-func Hello() {
-	fmt.Print("123")
+type Engine struct {
+}
+
+func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	switch r.URL.Path {
+	case "/":
+		fmt.Fprintf(w, "url = %q\n", r.URL.Path)
+	default:
+		fmt.Fprintf(w, "404 not fount: %q\n", r.URL.Path)
+	}
 }
