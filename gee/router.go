@@ -63,7 +63,7 @@ func (r *Router) getRoute(method string, path string) (*node, map[string]string)
 	return n, params
 }
 
-func (r *Router) AddRouter(method string, pattern string, handler HandlerFunc) {
+func (r *Router) AddRoute(method string, pattern string, handler HandlerFunc) {
 	parts := parsePattern(pattern)
 
 	key := method + "_" + pattern

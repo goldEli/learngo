@@ -15,11 +15,11 @@ func New() *Engine {
 }
 
 func (engine *Engine) GET(pattern string, handler HandlerFunc) {
-	engine.router.AddRouter("GET", pattern, handler)
+	engine.router.AddRoute("GET", pattern, handler)
 }
 
 func (engine *Engine) POST(pattern string, handler HandlerFunc) {
-	engine.router.AddRouter("POST", pattern, handler)
+	engine.router.AddRoute("POST", pattern, handler)
 }
 
 func (engine *Engine) Run(port string) {
