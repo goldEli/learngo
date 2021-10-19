@@ -1,4 +1,4 @@
-package main
+package learngo
 
 import (
 	"net/http"
