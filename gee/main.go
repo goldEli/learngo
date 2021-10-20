@@ -5,13 +5,20 @@ import (
 	"net/http"
 )
 
-type HandlerFunc func(*Context)
-type Engine struct {
-	router *Router
-}
+type (
+	HandlerFunc func(*Context)
+	Engine      struct {
+		*RouterGroup
+		router *Router
+		groups []*RouterGroup
+	}
+)
 
 func New() *Engine {
-	return &Engine{router: newRouter()}
+	engine := &Engine{router: newRouter()}
+	engine.RouterGroup = &RouterGroup{engine: engine}
+	engine.groups = []*RouterGroup{engine.RouterGroup}
+	return engine
 }
 
 func (engine *Engine) GET(pattern string, handler HandlerFunc) {
