@@ -63,7 +63,7 @@ func (r *Router) getRoute(method string, path string) (*node, map[string]string)
 	return n, params
 }
 
-func (r *Router) AddRoute(method string, pattern string, handler HandlerFunc) {
+func (r *Router) addRoute(method string, pattern string, handler HandlerFunc) {
 	parts := parsePattern(pattern)
 
 	key := method + "_" + pattern
@@ -80,10 +80,15 @@ func (r *Router) Handle(c *Context) {
 	if n != nil {
 		c.Params = params
 		key := c.Method + "_" + n.pattern
-		r.handlers[key](c)
+		// r.handlers[key](c)
+		c.handlers = append(c.handlers, r.handlers[key])
 	} else {
-		c.Status(http.StatusNotFound)
-		fmt.Fprintf(c.Writer, "404 NOT FOUND: %q:%q\n", c.Method, c.Path)
+		c.handlers = append(c.handlers, func(c *Context) {
+			c.Status(http.StatusNotFound)
+			fmt.Fprintf(c.Writer, "404 NOT FOUND: %q:%q\n", c.Method, c.Path)
+		})
 	}
+
+	c.Next()
 
 }

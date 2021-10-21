@@ -42,7 +42,7 @@ func TestGetRoute(t *testing.T) {
 
 	r := newRouter()
 	for _, d := range data {
-		r.AddRoute(d.method, d.pattern, nil)
+		r.addRoute(d.method, d.pattern, nil)
 	}
 
 	for _, d := range data {

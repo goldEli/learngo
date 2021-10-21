@@ -9,6 +9,10 @@ type RouterGroup struct {
 	middlewares []HandlerFunc
 }
 
+func (group *RouterGroup) Use(middleware ...HandlerFunc) {
+	group.middlewares = append(group.middlewares, middleware...)
+}
+
 func (group *RouterGroup) Group(prefix string) *RouterGroup {
 	engine := group.engine
 	newGroup := &RouterGroup{
@@ -23,7 +27,7 @@ func (group *RouterGroup) Group(prefix string) *RouterGroup {
 func (group *RouterGroup) addRoute(method string, comp string, handler HandlerFunc) {
 	pattern := group.prefix + comp
 	log.Printf("Route %4s - %s", method, pattern)
-	group.engine.router.AddRoute(method, pattern, handler)
+	group.engine.router.addRoute(method, pattern, handler)
 }
 
 func (group *RouterGroup) GET(pattern string, handler HandlerFunc) {
