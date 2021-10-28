@@ -46,7 +46,7 @@ func (engine *Engine) Run(port string) {
 }
 
 func (engine *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	var middlewares []HandlerFunc
+	middlewares := []HandlerFunc{Logger(), Recovery()}
 	for _, group := range engine.groups {
 		if strings.HasPrefix(r.URL.Path, group.prefix) {
 			middlewares = append(middlewares, group.middlewares...)
