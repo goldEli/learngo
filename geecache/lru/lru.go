@@ -1,6 +1,9 @@
 package lru
 
-import "container/list"
+import (
+	"container/list"
+	"fmt"
+)
 
 type Cache struct {
 	maxBytes int64 // max memery
@@ -64,6 +67,7 @@ func (c *Cache) Add(key string, value Value) {
 	} else {
 		ele := c.ll.PushFront(&entry{key, value})
 		c.cache[key] = ele
+		fmt.Print(value.Len())
 		c.nbytes += int64(len(key)) + int64(value.Len())
 	}
 	for c.maxBytes != 0 && c.maxBytes < c.nbytes {
