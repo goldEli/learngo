@@ -1,19 +1,31 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"net/http"
 
-type Response struct {
-	ID   string
-	Type string
-}
+	"github.com/goldEli/learngo/geecache"
+)
 
-type SpecificResponse struct {
-	Response // Response type is embedded inside SpecificResponse
-	Data     string
+var db = map[string]string{
+	"tom":  "43",
+	"lily": "53",
+	"sam":  "63",
 }
 
 func main() {
-	sr := SpecificResponse{Data: "123", Response: Response{ID: "123"}}
-	fmt.Printf(sr.ID)
-	fmt.Printf(sr.Response.ID)
+	key := "scores"
+	geecache.NewGroup(key, 2<<10, geecache.GetterFunc(func(key string) ([]byte, error) {
+		log.Println("[SlowDB] search key", key)
+		if v, ok := db[key]; ok {
+			return []byte(v), nil
+		}
+		return nil, fmt.Errorf("%s not exist", key)
+	}))
+	addr := "localhost:9999"
+	peers := geecache.NewHTTPPool(addr)
+	log.Println("geecache is running at", addr)
+	log.Fatal(http.ListenAndServe(addr, peers))
+
 }
